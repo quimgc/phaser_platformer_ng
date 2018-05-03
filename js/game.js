@@ -4,6 +4,7 @@ var level1 = {
     game.load.image('wall','assets/wall.png')
     game.load.image('ground','assets/ground.png')
     game.load.image('coin','assets/coin.png')
+    game.load.image('enemy', 'assets/enemy.png')
 
     game.load.audio('coin',['assets/coin.wav', 'assets/coin.mp3'])
 
@@ -32,15 +33,18 @@ var level1 = {
     //diem quins elements son amb col·lisions
     game.physics.arcade.collide(this.player, this.level)
     game.physics.arcade.overlap(this.player, this.coins, this.takeCoin, null, this)
+    game.physics.arcade.overlap(this.player, this.enemy, this.touchEnemy, null, this)
 
     this.inputs()
+
+    this.player.animations.play('idle')
   },
   render: function () {
 
   },
   loadLevel: function () {
     this.level = game.add.group()
-    // this.level.enableBody = true
+    this.level.enableBody = true
 
     //afegir coses al joc a una posicio determinada (x,y)
     game.add.sprite(90,(200/2)-50,'wall', 0,this.level)
@@ -50,6 +54,9 @@ var level1 = {
 
     //carregar monedes
     this.addCoins()
+
+    //carregar enemic
+    this.addEnemy()
 
     this.level.setAll('body.immovable', true)
   },
@@ -61,11 +68,27 @@ var level1 = {
       game.add.sprite(170,110,'coin',0,this.coins)
       game.add.sprite(200,110,'coin',0,this.coins)
   },
+  addEnemy: function () {
+    this.enemy = game.add.group()
+    this.enemy.enableBody = true
+
+    game.add.sprite(350, 110, 'enemy', 0, this.enemy)
+  },
   takeCoin: function(a,b) {
     game.add.tween(b.scale).to({x:0},150).start()
     game.add.tween(b).to({y:50},150).start()
 
     this.coinSound.play()
+  },
+  touchEnemy: function (a,b) {
+    //TODO: desactivar les fletxes per a que un cop mort, no es pugui moure.
+    window.setTimeout(function()
+    {
+      game.add.tween(a.scale).to({x:0},150).start()
+      game.add.tween(a).to({y:50},150).start()
+      // this.player.kill()
+
+    }, 1000);
   },
   inputs: function () {
     if (this.cursor.left.isDown) {
@@ -77,6 +100,8 @@ var level1 = {
       this.player.frame = 1
     } else {
       this.player.body.velocity.x = 0
+      this.player.frame = 0
+
     }
 
     if (this.cursor.up.isDown) {
