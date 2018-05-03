@@ -82,13 +82,14 @@ var level1 = {
   },
   touchEnemy: function (a,b) {
     //TODO: desactivar les fletxes per a que un cop mort, no es pugui moure.
-    window.setTimeout(function()
-    {
-      game.add.tween(a.scale).to({x:0},150).start()
-      game.add.tween(a).to({y:50},150).start()
-      // this.player.kill()
-
-    }, 1000);
+    // window.setTimeout(function()
+    // {
+    //   game.add.tween(a.scale).to({x:0},150).start()
+    //   game.add.tween(a).to({y:50},150).start()
+    //   // this.player.kill()
+    //
+    // }, 1000);
+    this.player.kill()
   },
   inputs: function () {
     if (this.cursor.left.isDown) {
