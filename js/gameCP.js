@@ -30,7 +30,18 @@ var playState = {
     this.jumpSound = game.add.audio('jump', 0.1)
     this.deadSound = game.add.audio('dead', 0.1)
 
-    this.setValues()
+    this.loadLevel()
+
+    // el 0 és per dir quina img s'ha de carregar dels jugadors (diferents moviments durant el joc, 0,1 2, 3, 4...)
+    this.player = game.add.sprite(250,50, 'player',0)
+
+    //tipus de fisica que s'aplicarà.
+    game.physics.arcade.enable(this.player)
+
+    //body fa referencia al cos del jugador
+    this.player.body.gravity.y = 600
+
+    this.player.animations.add('idle',[3,4,5,4], 5, true)
 
     this.jumping = false
     this.playerDead = false
@@ -101,10 +112,9 @@ var playState = {
     if(!this.playerDead) {
       this.playerDead = true
       this.deadSound.play()
-      this.player.kill()
-      //Quan toquen a l'enemic eliminio totes les monedes per tornar-les a afegir.
-      this.coins.destroy()
-      this.setValues()
+      a.body.enable = false
+      game.add.tween(a.scale).to({x:0},150).start()
+      game.add.tween(a).to({y:50},150).start()
     }
 
   },
@@ -144,25 +154,6 @@ var playState = {
         this.jumpPlayer()
       }
     }
-  },
-  setValues: function () {
-
-    // el 0 és per dir quina img s'ha de carregar dels jugadors (diferents moviments durant el joc, 0,1 2, 3, 4...)
-    this.player = game.add.sprite(250,50, 'player',0)
-
-    //tipus de fisica que s'aplicarà.
-    game.physics.arcade.enable(this.player)
-
-    //body fa referencia al cos del jugador
-    this.player.body.gravity.y = 600
-
-    this.player.animations.add('idle',[3,4,5,4], 5, true)
-
-    this.playerDead = false
-
-    this.loadLevel()
-
-
   }
 }
 
